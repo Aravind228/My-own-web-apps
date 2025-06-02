@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Aravind Form</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #121212;
+      color: #f1f1f1;
+      margin: 0;
+      padding: 20px;
+    }
+
+    h1 {
+      text-align: center;
+      color: #00bfff;
+    }
+
+    .form-section {
+      background-color: #1e1e1e;
+      padding: 25px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.5);
+      max-width: 700px;
+      margin: 0 auto;
+      animation: fadeIn 1s ease-in-out;
+    }
+
+    label {
+      display: inline-block;
+      width: 120px;
+      margin-bottom: 10px;
+      font-weight: bold;
+    }
+
+    input[type="text"],
+    select {
+      width: 250px;
+      padding: 8px;
+      background-color: #2a2a2a;
+      border: 1px solid #444;
+      color: #f1f1f1;
+      border-radius: 4px;
+      margin-bottom: 10px;
+    }
+
+    input[type="file"] {
+      color: #f1f1f1;
+    }
+
+    .horizontal-group {
+      display: flex;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+
+    .horizontal-group label {
+      width: auto;
+      margin-right: 15px;
+    }
+
+    .checkbox-group label,
+    .radio-group label {
+      margin-right: 15px;
+    }
+
+    iframe {
+      width: 100%;
+      height: 100px;
+      margin-top: 15px;
+      border: 1px solid #555;
+      background-color: #2a2a2a;
+      color: #fff;
+    }
+
+    .buttons {
+      margin-top: 20px;
+    }
+
+    button {
+      background-color: #00bfff;
+      color: #121212;
+      border: none;
+      padding: 10px 15px;
+      margin-right: 10px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #009acd;
+    }
+
+    .error {
+      color: red;
+      font-size: 0.9em;
+      margin-left: 10px;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+
+  <h1>QA Automation Form</h1>
+
+  <div class="form-section">
+    <div class="horizontal-group">
+      <label>First Name:</label>
+      <input type="text" id="firstName" />
+      <span class="error" id="errorFirstName"></span>
+    </div>
+
+    <div class="horizontal-group">
+      <label>Last Name:</label>
+      <input type="text" id="lastName" />
+      <span class="error" id="errorLastName"></span>
+    </div>
+
+    <div class="horizontal-group">
+      <label>Gender:</label>
+      <div class="radio-group">
+        <label><input type="radio" name="gender" value="Male" /> Male</label>
+        <label><input type="radio" name="gender" value="Female" /> Female</label>
+      </div>
+      <span class="error" id="errorGender"></span>
+    </div>
+
+    <div class="horizontal-group">
+      <label>Skills Known:</label>
+      <div class="checkbox-group">
+        <label><input type="checkbox" name="skills" value="Selenium" /> Selenium</label>
+        <label><input type="checkbox" name="skills" value="Playwright" /> Playwright</label>
+        <label><input type="checkbox" name="skills" value="Cypress" /> Cypress</label>
+        <label><input type="checkbox" name="skills" value="API" /> API</label>
+      </div>
+      <span class="error" id="errorSkills"></span>
+    </div>
+
+    <div class="horizontal-group">
+      <label>Country:</label>
+      <select id="country">
+        <option value="">-- Select --</option>
+        <option>India</option>
+        <option>United States</option>
+        <option>Germany</option>
+        <option>France</option>
+        <option>Japan</option>
+      </select>
+      <span class="error" id="errorCountry"></span>
+    </div>
+
+    <div class="horizontal-group">
+      <label>Upload File:</label>
+      <input type="file" id="uploadFile" />
+    </div>
+
+    <div class="horizontal-group">
+      <label>Frame Text Field:</label>
+      <iframe name="frameArea">
+        <input type="text" placeholder="Frame text field" />
+      </iframe>
+    </div>
+
+    <div class="buttons">
+      <button type="button" onclick="openWindow()" id="windowsBtn">Windows</button>
+      <button type="button" onclick="showAlert()" id="alertBtn">Alert</button>
+      <button type="button" onclick="saveForm()" id="saveBtn">Save</button>
+      <button type="button" onclick="logout()" id="logoutBtn">Logout</button>
+    </div>
+  </div>
+
+  <script>
+    function showAlert() {
+      const result = confirm("Are you sure?");
+      // No second alert — exits silently on OK or Cancel
+    }
+
+    function openWindow() {
+      const newWindow = window.open("", "_blank", "width=300,height=200");
+      newWindow.document.write("<h2 style='font-family: Arial;'>Child Window</h2>");
+    }
+
+    function saveForm() {
+      let valid = true;
+
+      // Clear all previous errors
+      document.querySelectorAll(".error").forEach(el => el.textContent = "");
+
+      const firstName = document.getElementById("firstName").value.trim();
+      const lastName = document.getElementById("lastName").value.trim();
+      const genderChecked = document.querySelector('input[name="gender"]:checked');
+      const skillsChecked = document.querySelectorAll('input[name="skills"]:checked');
+      const country = document.getElementById("country").value;
+
+      if (!firstName) {
+        document.getElementById("errorFirstName").textContent = "First name is required.";
+        valid = false;
+      }
+
+      if (!lastName) {
+        document.getElementById("errorLastName").textContent = "Last name is required.";
+        valid = false;
+      }
+
+      if (!genderChecked) {
+        document.getElementById("errorGender").textContent = "Please select gender.";
+        valid = false;
+      }
+
+      if (skillsChecked.length === 0) {
+        document.getElementById("errorSkills").textContent = "Please select at least one skill.";
+        valid = false;
+      }
+
+      if (!country) {
+        document.getElementById("errorCountry").textContent = "Please select a country.";
+        valid = false;
+      }
+
+      if (!valid) return;
+
+      const inputs = document.querySelectorAll('input, select');
+      inputs.forEach(input => {
+        if (input.type === 'radio' || input.type === 'checkbox' || input.type === 'file') {
+          input.disabled = true;
+        } else {
+          input.readOnly = true;
+        }
+      });
+
+      document.getElementById('saveBtn').disabled = true;
+      document.getElementById('alertBtn').disabled = true;
+      document.getElementById('windowsBtn').disabled = true;
+
+      alert("Form saved! All fields are now read-only.");
+    }
+
+    function logout() {
+      // Optional: Clear saved data
+      // localStorage.clear();
+      window.location.href = "Login Page.html";
+    }
+  </script>
+
+</body>
+</html>
