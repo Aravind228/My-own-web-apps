@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Sharva Dashboard</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #e6f7ff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            flex-direction: column;
+        }
+
+        .dashboard-box {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0,0,0,0.1);
+            width: 350px;
+            text-align: left;
+        }
+
+        h1 {
+            color: #0077b6;
+            text-align: center;
+        }
+
+        select, input[type="radio"] {
+            margin-top: 10px;
+        }
+
+        .section {
+            margin: 15px 0;
+        }
+
+        .section label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        .gender-options label {
+            margin-right: 15px;
+        }
+
+        button {
+            padding: 10px 20px;
+            margin-top: 15px;
+            margin-right: 10px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button.logout {
+            background-color: #dc3545;
+        }
+
+        button:hover {
+            opacity: 0.9;
+        }
+    </style>
+</head>
+<body>
+
+<div class="dashboard-box">
+    <h1 id="welcomeMsg">Welcome!</h1>
+
+    <!-- Gender Selection -->
+    <div class="section">
+        <label>Gender:</label>
+        <div class="gender-options">
+            <label><input type="radio" name="gender" value="Male"> Male</label>
+            <label><input type="radio" name="gender" value="Female"> Female</label>
+        </div>
+    </div>
+
+    <!-- Country Selection -->
+    <div class="section">
+        <label for="country">Select Country:</label>
+        <select id="country">
+            <option value="">-- Choose a country --</option>
+            <option>United States</option>
+            <option>India</option>
+            <option>Canada</option>
+            <option>United Kingdom</option>
+            <option>Germany</option>
+            <option>France</option>
+            <option>Australia</option>
+            <option>Brazil</option>
+            <option>Japan</option>
+            <option>South Africa</option>
+        </select>
+    </div>
+
+    <!-- Buttons -->
+    <div>
+        <button onclick="showAlert()">Alert Button</button>
+        <button class="logout" onclick="logout()">Logout</button>
+	<button onclick="savePreferences()">Save Preferences</button>
+
+    </div>
+</div>
+
+<script>
+    // Check login
+    const username = localStorage.getItem("loggedInUser");
+
+    if (!username) {
+        window.location.href = "index.html";
+    } else {
+        document.getElementById("welcomeMsg").textContent = `Welcome, ${username}!`;
+    }
+	// Auto-fill gender and country from storage if available
+	const savedGender = localStorage.getItem("selectedGender");
+	const savedCountry = localStorage.getItem("selectedCountry");
+
+	if (savedGender) {
+    	document.querySelector(`input[name="gender"][value="${savedGender}"]`).checked = true;
+}
+
+if (savedCountry) {
+    document.getElementById("country").value = savedCountry;
+}
+
+
+    // Alert button logic
+    function showAlert() {
+        const confirmed = confirm("You have clicked the alert button.");
+        if (confirmed) {
+            alert("You clicked YES");
+        } else {
+            alert("You clicked NO");
+        }
+    }
+
+    // Logout button
+    function logout() {
+    localStorage.clear();
+    localStorage.setItem("logoutMessage", "true");
+    window.location.href = "Loginpage.html";
+}
+</script>
+
+<script>
+    // Show logout success message if present
+    window.addEventListener("load", function () {
+        const logoutMessage = localStorage.getItem("logoutMessage");
+        if (logoutMessage === "true") {
+            const message = document.getElementById("message");
+            message.style.color = "green";
+            message.textContent = "You have been logged out successfully.";
+            localStorage.removeItem("logoutMessage");
+        }
+    });
+</script>
+
+
+
+function savePreferences() {
+    const gender = document.querySelector('input[name="gender"]:checked')?.value;
+    const country = document.getElementById("country").value;
+
+    if (!gender || !country) {
+        alert("Please select both gender and country before saving.");
+        return;
+    }
+
+    localStorage.setItem("selectedGender", gender);
+    localStorage.setItem("selectedCountry", country);
+
+    alert("Preferences saved successfully!");
+}
+
+
+</body>
+</html>
